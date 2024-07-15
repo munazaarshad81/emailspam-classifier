@@ -1,0 +1,152 @@
+MUNAZA ARSHAD
+ARTIFICIAL INTELLIGENCE 
+TASK:2
+
+The Spam Email Classifier
+The spam email classifier is a machine learning model designed to differentiate between spam (unwanted or junk) and ham (legitimate) emails. This classifier utilizes two popular algorithms: Naive Bayes and Support Vector Machines (SVM).
+Key Features:
+1.	Dataset: The classifier uses the "Spam SMS Collection" dataset, which contains SMS messages labeled as 'spam' or 'ham'.
+2.	Text Preprocessing:
+o	Count Vectorizer: Converts the text data into a matrix of token counts.
+o	TF-IDF Transformer: Transforms the token count matrix into a TF-IDF (Term Frequency-Inverse Document Frequency) representation to weigh the importance of words in the messages.
+3.	Machine Learning Algorithms:
+o	Naive Bayes: A probabilistic classifier based on applying Bayes' theorem with strong independence assumptions between the features.
+o	Support Vector Machine (SVM): A linear classifier that finds the hyperplane that best separates the classes in the feature space.
+4.	Pipeline: The classifier pipelines streamline the process of text transformation and classification. This ensures that the input text is preprocessed and classified in a single, seamless workflow.
+5.	Model Training and Evaluation:
+o	The dataset is split into training and testing sets to evaluate the model's performance.
+o	The models are trained on the training set and tested on the testing set.
+o	Performance metrics such as accuracy, precision, recall, F1-score, and confusion matrix are used to assess the effectiveness of each classifier.
+This implementation provides a robust approach to classifying spam emails, leveraging the strengths of both Naive Bayes and SVM algorithms to achieve high accuracy in distinguishing between spam and legitimate messages.
+
+
+
+
+IMPLEMENTATION:
+To implement a spam email classifier using machine learning, we can use algorithms like Naive Bayes or Support Vector Machines (SVM). 
+Step 1: Import Required Libraries
+First, we need to import the necessary libraries.
+python
+
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import SVC
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+
+Step 2: Load the Dataset
+For demonstration, we can use the popular "Spam SMS Collection" dataset.
+# Load dataset
+url = "https://raw.githubusercontent.com/justmarkham/pycon-2016-tutorial/master/data/sms.tsv"
+df = pd.read_csv(url, sep='\t', header=None, names=['label', 'message'])
+
+# Convert label to binary
+df['label'] = df['label'].map({'ham': 0, 'spam': 1})
+
+Step 3: Split the Data
+Split the data into training and testing sets.
+X = df['message']
+y = df['label']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+Step 4: Create a Pipeline
+Create a pipeline that includes vectorization and the classifier. We'll create two pipelines: one for Naive Bayes and one for SVM.
+Naive Bayes Pipeline
+nb_pipeline = Pipeline([
+    ('vect', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', MultinomialNB())
+])
+
+SVM Pipeline
+svm_pipeline = Pipeline([
+    ('vect', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', SVC(kernel='linear'))
+])
+Step 5: Train the Models
+Train both the Naive Bayes and SVM models.
+Train Naive Bayes
+nb_pipeline.fit(X_train, y_train)
+
+Train SVM
+svm_pipeline.fit(X_train, y_train)
+Step 6: Evaluate the Models
+Evaluate both models using the test data.
+Evaluate Naive Bayes
+y_pred_nb = nb_pipeline.predict(X_test)
+print("Naive Bayes Classifier")
+print(classification_report(y_test, y_pred_nb))
+print("Accuracy:", accuracy_score(y_test, y_pred_nb))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_nb))
+Evaluate SVM
+y_pred_svm = svm_pipeline.predict(X_test)
+print("SVM Classifier")
+print(classification_report(y_test, y_pred_svm))
+print("Accuracy:", accuracy_score(y_test, y_pred_svm))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_svm))
+
+Complete Code
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import SVC
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+
+# Load dataset
+url = "https://raw.githubusercontent.com/justmarkham/pycon-2016-tutorial/master/data/sms.tsv"
+df = pd.read_csv(url, sep='\t', header=None, names=['label', 'message'])
+df['label'] = df['label'].map({'ham': 0, 'spam': 1})
+
+# Split data
+X = df['message']
+y = df['label']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Naive Bayes pipeline
+nb_pipeline = Pipeline([
+    ('vect', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', MultinomialNB())
+])
+
+# SVM pipeline
+svm_pipeline = Pipeline([
+    ('vect', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', SVC(kernel='linear'))
+])
+
+# Train models
+nb_pipeline.fit(X_train, y_train)
+svm_pipeline.fit(X_train, y_train)
+
+# Evaluate Naive Bayes
+y_pred_nb = nb_pipeline.predict(X_test)
+print("Naive Bayes Classifier")
+print(classification_report(y_test, y_pred_nb))
+print("Accuracy:", accuracy_score(y_test, y_pred_nb))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_nb))
+
+# Evaluate SVM
+y_pred_svm = svm_pipeline.predict(X_test)
+print("SVM Classifier")
+print(classification_report(y_test, y_pred_svm))
+print("Accuracy:", accuracy_score(y_test, y_pred_svm))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_svm))
+
+“Screenshots”
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Conclusion:
+The spam email classifier effectively distinguishes between spam and legitimate messages using Naive Bayes and SVM algorithms. With robust preprocessing and evaluation, it achieves high accuracy and reliable performance in email classification.
